@@ -24,8 +24,8 @@
     </nav>
 
     <div class="container mt-5">
+      <!-- User Table (Existing) -->
       <h2 class="text-center">Admin Panel - User Management</h2>
-
       <table class="table table-striped mt-4">
         <thead class="table-dark">
           <tr>
@@ -33,6 +33,7 @@
             <th>Name</th>
             <th>Email</th>
             <th>Gender</th>
+            <th>Posts</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -44,16 +45,30 @@
             <td><%= user.email %></td>
             <td><%= user.gender %></td>
             <td>
-              <!-- <a
-                href="/admin/edit/<%= user._id %>"
-                class="btn btn-warning btn-sm"
-                >Edit
-              </a> -->
+              <% if (user.posts.length > 0) { %>
+              <ul>
+                <% user.posts.forEach(post => { %>
+                <li style="margin-bottom: 2px">
+                  <%= new Date(post.date).toLocaleString() %>:
+                  <strong><%= post.content %></strong>
+                  <a
+                    href="/admin/post/delete/<%= post._id %>"
+                    class="btn btn-danger btn-sm"
+                    >Delete</a
+                  >
+                </li>
+                <% }) %>
+              </ul>
+              <% } else { %>
+              <p>No posts available</p>
+              <% } %>
+            </td>
+            <td>
               <a
-                href="/admin/delete/<%=user._id%>"
+                href="/admin/delete/<%= user._id %>"
                 class="btn btn-danger btn-sm"
-                >Delete
-              </a>
+                >Delete User</a
+              >
             </td>
           </tr>
           <% }) %>

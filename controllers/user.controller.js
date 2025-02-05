@@ -100,9 +100,9 @@ const createPost = async (req, res) => {
     content
   })
 
-  user.posts.push(post._id)
+  await user.posts.push(post._id)
   await user.save()
-  res.status(200).redirect(`/user/profile/${req.user.id}`)
+  return res.status(200).redirect(`/user/profile/${req.user.id}`)
 }
 
 
@@ -180,7 +180,7 @@ const deletePost = async (req, res) => {
     let postId = req.params.id
     let user = await usermodel.findOne({ _id: req.user.id })
 
-    await user.posts.splice(postId, 1)
+    await user.posts.splice(user.posts.indexOf(postId), 1)
     await postmodel.findOneAndDelete({ _id: postId })
 
     await user.save()

@@ -1,11 +1,10 @@
+const postmodel = require('../models/post.model.js')
 const usermodel = require('../models/user.model.js')
-const router = require('../routes/user.routes.js')
-const { hashPassword, verifyPassword } = require('../utils/bcrypt.js')
-const { createToken } = require('../utils/jwt.js')
 
 const userList = async (req, res) => {
   let admin = await usermodel.findOne({ _id: req.user.id })
-  const users = await usermodel.find({})
+  const users = await usermodel.find({}).populate("posts")
+  // let posts = await postModel.find({}).populate("user")
 
   res.render('allUsers', { users, admin })
 }
@@ -21,7 +20,26 @@ const deleteUser = async (req, res) => {
   return res.status(302).redirect('/admin/users')
 }
 
+const deletePost = async (req, res) => {
+  try {
+    let postId = req.params.id
+    let post = await postmodel.findOne({ _id: postId })
+
+    let user = await usermodel.findOne({ _id: post.user })
+
+    let deleted = await user.posts.splice(user.posts.indexOf(postId), 1)
+    console.log("deleted post: ", deleted)
+
+    await user.save()
+    await postmodel.findOneAndDelete({ _id: postId })
+    return res.redirect(`/admin/users`)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
 module.exports = {
   userList,
-  deleteUser
+  deleteUser,
+  deletePost
 }
