@@ -77,6 +77,7 @@ const profile = async (req, res) => {
   const id = req.params.id
   if (!id) return res.json({ message: "Bad request, id expected", status: 400 })
 
+  if (id != req.user.id) return res.status(400).redirect('/user/login')
   let user = await usermodel.findOne({ _id: id }).populate('posts')
   if (!user) return res.json({ data: null, message: "invalid user id", status: 400 })
 
