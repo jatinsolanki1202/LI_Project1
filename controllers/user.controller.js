@@ -155,6 +155,40 @@ const handleUpdateProfile = async (req, res) => {
   }
 }
 
+// Post Controllers
+const likePost = async (req, res) => {
+  try {
+    let id = req.params.id;
+    let post = await postmodel.findOne({ _id: id }).populate("user")
+
+    if (post.likes.indexOf(req.user.id) == -1) {
+      post.likes.push(req.user.id)
+    } else {
+      post.likes.splice(req.user.id, 1)
+    }
+
+    await post.save()
+    return res.redirect(`/user/profile/${req.user.id}`)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
+const deletePost = async (req, res) => {
+  try {
+    let postId = req.params.id
+    let user = await usermodel.findOne({ _id: req.user.id })
+
+    await user.posts.splice(postId, 1)
+    await postmodel.findOneAndDelete({ _id: postId })
+
+    await user.save()
+    return res.redirect(`/user/profile/${req.user.id}`)
+  } catch (err) {
+    console.log(err.message)
+  }
+}
+
 module.exports = {
   login,
   handleLogin,
@@ -166,5 +200,7 @@ module.exports = {
   deleteProfile,
   handleDeleteProfile,
   updateProfile,
-  handleUpdateProfile
+  handleUpdateProfile,
+  likePost,
+  deletePost
 }

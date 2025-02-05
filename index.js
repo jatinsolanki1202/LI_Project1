@@ -17,7 +17,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "/public/js/bootstrap.bundle.min.js"],
       scriptSrcAttr: ["'unsafe-inline'"], // Enables inline event handlers
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "/public/css/bootstrap.min.css"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "/public/css/bootstrap.min.css", "cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"],
     },
   },
 }))

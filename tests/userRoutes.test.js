@@ -1,7 +1,6 @@
 const app = require('../index.js');
 const request = require('supertest');
 const mongoose = require('mongoose')
-const { connect, disConnectDb } = require('../config/testDb.js')
 
 // Register tests
 describe('user register tests', () => {

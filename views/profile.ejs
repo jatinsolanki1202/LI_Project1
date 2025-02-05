@@ -8,6 +8,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
   </head>
   <body class="bg-dark">
     <!-- Navbar -->
@@ -30,7 +34,7 @@
             <li class="nav-item">
               <a
                 href="/user/update-profile"
-                class="nav-link btn btn-outline-warning me-2"
+                class="nav-link btn btn-outline-primary me-2"
                 >Update Profile</a
               >
             </li>
@@ -50,7 +54,7 @@
             </li>
             <% if (user.role === 'admin') { %>
             <li class="nav-item">
-              <a href="/admin/users" class="nav-link btn btn-warning ms-2"
+              <a href="/admin/users" class="nav-link btn btn-success ms-2"
                 >Admin Panel</a
               >
             </li>
@@ -95,31 +99,40 @@
         class="card text-light mt-3 p-3"
         style="background: #82acff80; position: relative"
       >
-        <!-- Top Section: Post Content & Date -->
         <div class="d-flex justify-content-between">
-          <p class="fw-bold text-light"><%= post.content %></p>
-          <p class="text-muted" style="font-size: 0.9rem">
+          <p style="color: #a6c2ff; font-size: 0.8rem">@<%= user.fname %></p>
+          <p class="text-muted" style="font-size: 0.7rem">
             <%= post.date.toISOString().split('T')[0] %>
           </p>
+        </div>
+        <!-- Top Section: Post Content & Date -->
+        <div class="d-flex justify-content-between">
+          <p class="fw-semibold text-light"><%= post.content %></p>
         </div>
 
         <!-- Bottom Section: Like, Unlike, Edit, Delete -->
         <div class="d-flex justify-content-between align-items-center mt-2">
           <!-- Like & Unlike Buttons -->
           <div>
-            <button class="btn btn-sm me-2">Like</button>
-            <button class="btn btn-sm">Unlike</button>
+            <a href="/user/post/like/<%= post._id %>" class="btn btn-sm p-0">
+              <%= post.likes.length %> like
+            </a>
           </div>
 
-          <!-- Edit & Delete Icons
+          <!-- Edit & Delete Icons -->
           <div>
-            <a href="/edit/<%= post._id %>" class="btn btn-sm btn-warning">
+            <!-- <a href="/edit/<%= post._id %>" class="btn btn-sm btn-warning">
               ✏
-            </a>
-            <a href="/delete/<%= post._id %>" class="btn btn-sm btn-danger">
-              🗑
-            </a>
-          </div> -->
+            </a> -->
+            <button
+              onclick="confirmDeletePost('<%= post._id %>')"
+              class="btn btn-dark btn-sm d-flex align-items-center justify-content-center rounded-circle shadow"
+              style="width: 36px; height: 36px; padding: 0"
+            >
+              <i class="fas fa-trash-alt"></i>
+              <!-- Font Awesome trash icon -->
+            </button>
+          </div>
         </div>
       </div>
       <% }) %> <% } else { %>
@@ -132,6 +145,12 @@
       function confirmLogout() {
         if (confirm("Are you sure you want to logout?")) {
           window.location.href = "/user/logout";
+        }
+      }
+
+      function confirmDeletePost(postId) {
+        if (confirm("Are you sure you want to delete this post?")) {
+          window.location.href = `/user/post/delete/${postId}`;
         }
       }
     </script>
