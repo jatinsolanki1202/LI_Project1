@@ -24,10 +24,10 @@ const handleLogin = async (req, res) => {
     if (!existingUser) return res.status(400).json({ data: null, message: 'invalid email or password', status: 400 })
 
     // login
-    let isValidPassword = verifyPassword(password, existingUser.password)
+    let isValidPassword = await verifyPassword(password, existingUser.password)
     if (!isValidPassword) return res.status(400).json({ data: null, message: 'invalid email or password', status: 400 })
 
-    const token = await createToken(existingUser._id, existingUser.role)
+    const token = createToken(existingUser._id, existingUser.role)
 
     // res.setHeader('Authorization', `Bearer ${token}`);
     res.cookie("token", token)
@@ -120,12 +120,12 @@ const handleDeleteProfile = async (req, res) => {
   if (!password) return res.json({ message: "password is required", status: 400 })
   let user = await usermodel.findOne({ _id: req.user.id })
 
-  let isValidPassword = verifyPassword(password, user.password)
+  let isValidPassword = await verifyPassword(password, user.password)
   if (!isValidPassword) return res.status(401).redirect('/user/delete-profile')
 
   await postmodel.deleteMany({ user: user._id })
   await usermodel.findOneAndDelete({ _id: req.user.id })
-  res.status(302).redirect('/user/register')
+  return res.status(302).redirect('/user/register')
 }
 
 

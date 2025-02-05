@@ -74,7 +74,7 @@ describe('user login tests', () => {
   test('invalid password passed', async () => {
     const response = await request(app).post("/user/login").send({
       email: "hello@gmail.com",
-      password: "s1",
+      password: "s1ss",
     })
     expect(response.statusCode).toBe(400)
   })
@@ -83,6 +83,18 @@ describe('user login tests', () => {
     const response = await request(app).post("/user/login").send({
       email: "hello@gmail.com",
       password: "ss",
+    })
+    expect(response.statusCode).toBe(302)
+  })
+})
+
+// Update profile tests
+describe('user update tests', () => {
+  test('update all details', async () => {
+    const response = await request(app).post('/user/update-profile').send({
+      fname: "hellowww",
+      lname: "world",
+      gender: "male",
     })
     expect(response.statusCode).toBe(302)
   })
