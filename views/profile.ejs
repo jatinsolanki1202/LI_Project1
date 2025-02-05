@@ -102,7 +102,8 @@
         <div class="d-flex justify-content-between">
           <p style="color: #a6c2ff; font-size: 0.8rem">@<%= user.fname %></p>
           <p class="text-muted" style="font-size: 0.7rem">
-            <%= post.date.toLocaleString() %>
+            <%= post.date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            %>
           </p>
         </div>
         <!-- Top Section: Post Content & Date -->
