@@ -24,7 +24,7 @@ const handleLogin = async (req, res) => {
     if (!existingUser) return res.status(400).json({ data: null, message: 'invalid email or password', status: 400 })
 
     // login
-    let isValidPassword = await verifyPassword(password, existingUser.password)
+    let isValidPassword = verifyPassword(password, existingUser.password)
     if (!isValidPassword) return res.status(400).json({ data: null, message: 'invalid email or password', status: 400 })
 
     const token = await createToken(existingUser._id, existingUser.role)
@@ -120,7 +120,7 @@ const handleDeleteProfile = async (req, res) => {
   if (!password) return res.json({ message: "password is required", status: 400 })
   let user = await usermodel.findOne({ _id: req.user.id })
 
-  let isValidPassword = await verifyPassword(password, user.password)
+  let isValidPassword = verifyPassword(password, user.password)
   if (!isValidPassword) return res.status(401).redirect('/user/delete-profile')
 
   await postmodel.deleteMany({ user: user._id })
